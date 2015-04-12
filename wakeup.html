@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+	<meta charset="UTF-8">
+	<title>Sezar Gantous's online portfolio</title>
+
+	<!-- Viewport meta tag to prevent iPhone from scaling our page -->
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+	<style type="text/css">
+     img{
+     	margin-left: 0.625em;
+     }
+     li{
+     	margin-bottom: 0.625em;
+     }
+     header {
+ 		 margin-bottom: 2.625em;
+	 }
+   #err,#info{
+    display: none;
+   }
+   .remove,.pause, 
+   .play, .edit {
+    float: right;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  #sites {
+    margin-top: 2.3em;
+  }
+	</style>
+  </head>
+  <body>
+   <div class="container-fluid">
+     <div class="row">
+     	<div class="col-sm-12 col-md-6 col-md-offset-3">
+     		<header>
+               <h2>Keep Heroku app alive</h2>
+               <h5>You can add or pause many apps</h5>
+     		</header>
+     		<form class="form">
+          <div class="form-group">
+          <label for="appName">App Name:</label>
+          <input type="text" class="form-control" id="appName" placeholder="full domain (include hhtp://)">
+        </div>  			  
+        <div class="form-group">
+			    <label for="url">Url:</label>
+			    <input type="text" class="form-control" id="url" placeholder="full url (include http:// or https://)">
+			  </div>
+        <div class="form-group">
+          <label for="intravel">Intravel:</label>
+          <input type="text" class="form-control" id="intravel" placeholder="intravel to wake up the dyno">
+        </div>
+			  <button type='button' id="awake" class="btn btn-default" onClick="wakeUp();">wake up!</button>
+        <div id="err" class="alert alert-danger" role="alert"></div>
+        <div id="info" class="alert alert-info" role="alert"> waking up the app! be patient on the dyno </div>
+
+			</form>
+     	</div>
+     </div>
+     <div class="row">
+     	<div class="col-sm-12 col-md-6 col-md-offset-3">
+     		<ul id="sites" class="list-group">
+          <li id="empty">No apps to wake up...</li>
+     		</ul>
+     		<h3 id="word"></h3>
+     		<p id="extraInfo"></p>
+     	</div>
+     </div>
+   </div>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+  	<script type="text/javascript">
+    var sites  = [];
+    var empty = '<li id="empty">No apps to wake up...</li>';
+    $(document).ready(function() {
+        	
+
+    });
+
+
+  	</script>
+  </body>
+</html>
