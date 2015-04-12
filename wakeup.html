@@ -75,15 +75,74 @@
    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-  	<script type="text/javascript">
+    <script type="text/javascript">
     var sites  = [];
     var empty = '<li id="empty">No apps to wake up...</li>';
     $(document).ready(function() {
-        	
+          
 
     });
 
+    function wakeUp () {
+      $("#info").show('fast');
 
-  	</script>
+      $.ajax($("#url").val())
+      .fail(function( jqXHR, textStatus){
+       /* It's not really working...???*/
+         console.dir("faild: "+jqXHR.status + "  "+ textStatus);
+        if(jqXHR.status === "200")
+        {
+          console.log("status:200");
+          print();
+        }
+      })
+      .done(function(){
+
+       print();
+      })
+      .always(function(){
+        $("#info").hide('fast');
+        print();
+      });
+    }
+
+
+    function startTimer() {
+        
+        sites.push( setInterval(function(){ wakeUp() }, 3480000) );
+        
+    }
+
+    function pause(id) {
+        clearInterval(id);
+    }
+
+
+    function print () {
+     var str = '';
+     var url = $("#url").val();
+
+     str+= '<li id="li-'+ url +'" class="list-group-item">';
+     str+= '<a href="'+url+'" title="'+url+'">';
+     str+= $("#appName").val();
+     str+= '</a>'
+     str+= '<button id="pause-'+ url +'" class="alert alert-warning pause" title="pause app"> 
+              <span id="spanPause-'+ url +'" class="glyphicon glyphicon glyphicon-pause"></span> </button>';
+     str+= '<button id="edit-'+ url +'" class="alert alert-info edit" title="edit app">
+               <span id="spanEdit-'+ url +'" class="glyphicon glyphicon-pencil"></span> </button>';
+     str+= '<button id="remove-'+ url +'" class="alert alert-danger remove" title="delete app">
+                <span id="spanRemove-'+ url +'" class="glyphicon glyphicon-remove"></span> </button>';
+     str += '</li>';
+
+
+     $('#pause-'+ url).on('click',function(){
+
+     });
+
+
+      $("#sites").append(str);
+    }
+
+    </script>
   </body>
 </html>
