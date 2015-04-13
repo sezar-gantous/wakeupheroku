@@ -36,8 +36,8 @@ var empty = '<li class="list-group-item" id="empty">No apps to wake up...</li>';
     function pause(id,url,name) {
 
        // change the button to play(hide pause button show play button..)
-         $('#spanPause-'+ url).hide(); 
-         $('#spanPlay-'+ url).show();
+         $('#buttonPause-'+ name).hide(); 
+         $('#buttonPlay-'+ name).show();
           
           //clear the intravel
         clearInterval(id);
@@ -92,8 +92,8 @@ var empty = '<li class="list-group-item" id="empty">No apps to wake up...</li>';
 
     function play(url,intravel,name) {
       // change the button to pause(hide play button show pause button..)
-         $('#spanPlay-'+ url).hide();
-         $('#spanPause-'+ url).show(); 
+         $('#buttonPlay-'+ name).hide();
+         $('#buttonPause-'+ name).show(); 
 
    //no need to update since its already playing
      if(name !== null){
@@ -134,29 +134,31 @@ var empty = '<li class="list-group-item" id="empty">No apps to wake up...</li>';
      var intravel = site.intravel;
 
 
-     str+= '<li id="li-'+ url +'" class="list-group-item">';
+     str+= '<li id="li-'+ name +'" class="list-group-item">';
      str+= '<a href="'+url+'" title="'+url+'">';
      str+= name;
      str+= '</a>'
      str+= 'Will wake up every '+(intravel/60000) + " mins"
-     str+= '<button id="pause-'+ url +'" class="alert alert-warning pause" onClick="pause('+id+','+name+');" title="pause app">'+ 
-              '<span id="spanPause-'+ url +'" class="glyphicon glyphicon glyphicon-pause"></span> </button>';
-     str+= '<button id="play-'+ url +'" class="alert alert-success play" onClick="play('+url+','+intravel+','+name+');" title="resume app">'+ 
-              '<span id="spanPlay-'+ url +'" class="glyphicon glyphicon glyphicon-play"></span> </button>';
-     str+= '<button id="edit-'+ url +'" class="alert alert-info edit" onClick="editing('+url+','+intravel+','+name+','+site.stat+');" title="edit app">'+
-               '<span id="spanEdit-'+ url +'" class="glyphicon glyphicon-pencil"></span> </button>';
-     str+= '<button id="remove-'+ url +'" class="alert alert-danger remove" onClick="remove('+id+','+url+','+name+');" title="delete app">'+
-               '<span id="spanRemove-'+ url +'" class="glyphicon glyphicon-remove"></span> </button>';
+     str+= '<button id="buttonPause-'+ name +'" class="alert alert-warning pause" onClick="pause('+id+','+name+');" title="pause app">'+ 
+              '<span id="spanPause-'+ name +'" class="glyphicon glyphicon glyphicon-pause"></span> </button>';
+     str+= '<button id="buttonPlay-'+ name +'" class="alert alert-success play" onClick="play('+url+','+intravel+','+name+');" title="resume app">'+ 
+              '<span id="spanPlay-'+ name +'" class="glyphicon glyphicon glyphicon-play"></span> </button>';
+     str+= '<button id="edit-'+ name +'" class="alert alert-info edit" onClick="editing('+url+','+intravel+','+name+','+site.stat+');" title="edit app">'+
+               '<span id="spanEdit-'+ name +'" class="glyphicon glyphicon-pencil"></span> </button>';
+     str+= '<button id="remove-'+ name +'" class="alert alert-danger remove" onClick="remove('+id+','+url+','+name+');" title="delete app">'+
+               '<span id="spanRemove-'+ name +'" class="glyphicon glyphicon-remove"></span> </button>';
      str += '</li>';
   
+      $("#sites").html(str);
+    
      if(site.stat === 'pause'){
        // change the button to play(hide pause button show play button..)
-         $('#spanPause-'+ url).hide(); 
-         $('#spanPlay-'+ url).show(); 
+       
+         $('#buttonPause-'+ name).hide(); 
+         $('#buttonPlay-'+ name).show(); 
      }
 
 
-      $("#sites").html(str);
     }
 
 
