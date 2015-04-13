@@ -1,6 +1,6 @@
 var sites;
 var db = new Firebase("https://wakeupheroku.firebaseio.com/sites");
-var empty = '<li id="empty">No apps to wake up...</li>';
+var empty = '<li class="list-group-item" id="empty">No apps to wake up...</li>';
 
 
     $(document).ready(function() {
@@ -12,15 +12,19 @@ var empty = '<li id="empty">No apps to wake up...</li>';
 
 /*when user firt adds a site*/
     function startTimer() {
-       $("#info").show('fast');
+       $("#info").show();
 
         var url = $("#url").val();
         var name = $("#name").val();
         var intravel = $("#intravel").val();
-        var intervalID = play(url,intravel); //starts intravel and returns the id
-        
-    //printing
-      print(url,name,intravel);
+       
+
+       db.child(name).set({
+        name: name,
+        url: url,
+        intravel: intravel,
+        stat:"play"
+       });
 
 
       $("#info").hide('fast');
@@ -29,11 +33,75 @@ var empty = '<li id="empty">No apps to wake up...</li>';
 
 
 
-    function pause(id) {
+    function pause(id,url,name) {
+
+       // change the button to play(hide pause button show play button..)
+         $('#spanPause-'+ url).hide(); 
+         $('#spanPlay-'+ url).show();
+          
+          //clear the intravel
         clearInterval(id);
+
+        db.child(name).update({
+          stat: "pause"
+        });
     }
 
-    function play(url,intravel) {
+    function remove (id,url,name) {
+      // CSS STUFF..
+     
+     //clear the whole li anf children fron DOM
+     //$("li-"+url).remove();
+
+      //if id is null that mean it was paused... 
+      if (id !== null) {
+         clearInterval(id);
+      }
+
+       //remove from firebase
+      db.child(name).remove();
+
+    }
+
+    function edit (url,intravel,name,status) {
+      //preparing modal
+      $("#modalLabel").html('Edite'+name);
+      $("#editName").val(name);
+      $("#editUrl").val(url);
+      $("#editIntravel").val(intravel);
+
+      //add click event for save button
+      $("#editSave").click(function(){
+        
+        //remove current 
+           db.child(name).remove();
+        //creat a new one....
+        db.child($("#editName").val()).set({
+          name: $("#editName").val()+'',
+          url: $("#editUrl").val()+'',
+          intravel: $("#editIntravel").val()+'',
+          stat: _status
+        });
+
+        $('#editModal').modal('hide');
+
+      });
+
+      $('#editModal').modal('show')
+    }
+
+    function play(url,intravel,name) {
+      // change the button to pause(hide play button show pause button..)
+         $('#spanPlay-'+ url).hide();
+         $('#spanPause-'+ url).show(); 
+
+   //no need to update since its already playing
+     if(name !== null){
+      db.child(name).update({
+               stat: "play"
+             });
+     }
+        console.log("timer stated");
         return setInterval(function(){ wakeUp(url) }, intravel)
     }
 
@@ -59,55 +127,36 @@ var empty = '<li id="empty">No apps to wake up...</li>';
     }
 
 
-    function print (url,name,intravel,id) {
+    function print (site,id) {
      var str = '';
+     var url = site.url;
+     var name = site.name;
+     var intravel = site.intravel;
+
 
      str+= '<li id="li-'+ url +'" class="list-group-item">';
      str+= '<a href="'+url+'" title="'+url+'">';
      str+= name;
      str+= '</a>'
      str+= 'Will wake up every '+(intravel/60000) + " mins"
-     str+= '<button id="pause-'+ url +'" class="alert alert-warning pause" title="pause app">'+ 
+     str+= '<button id="pause-'+ url +'" class="alert alert-warning pause" onClick="pause('+id+','+name+');" title="pause app">'+ 
               '<span id="spanPause-'+ url +'" class="glyphicon glyphicon glyphicon-pause"></span> </button>';
-     str+= '<button id="play-'+ url +'" class="alert alert-success play" title="resume app">'+ 
+     str+= '<button id="play-'+ url +'" class="alert alert-success play" onClick="play('+url+','+intravel+','+name+');" title="resume app">'+ 
               '<span id="spanPlay-'+ url +'" class="glyphicon glyphicon glyphicon-play"></span> </button>';
-     str+= '<button id="edit-'+ url +'" class="alert alert-info edit" title="edit app">'+
+     str+= '<button id="edit-'+ url +'" class="alert alert-info edit" onClick="editing('+url+','+intravel+','+name+','+site.stat+');" title="edit app">'+
                '<span id="spanEdit-'+ url +'" class="glyphicon glyphicon-pencil"></span> </button>';
-     str+= '<button id="remove-'+ url +'" class="alert alert-danger remove" title="delete app">'+
+     str+= '<button id="remove-'+ url +'" class="alert alert-danger remove" onClick="remove('+id+','+url+','+name+');" title="delete app">'+
                '<span id="spanRemove-'+ url +'" class="glyphicon glyphicon-remove"></span> </button>';
      str += '</li>';
+  
+     if(site.stat === 'pause'){
+       // change the button to play(hide pause button show play button..)
+         $('#spanPause-'+ url).hide(); 
+         $('#spanPlay-'+ url).show(); 
+     }
 
-    /*register click events*/
 
-      $('#pause-'+ url).on('click',function(){
-
-         // change the button to play(hide pause button show play button..)
-         $('spanPause-'+ url).hide(); 
-         $('spanPlay-'+ url).show();
-          
-          //clear the intravel
-          pause(intervalID);
-
-      }); 
-      $('#edit-'+ url).on('click',function(){
-
-       });    
-      $('#remove-'+ url).on('click',function(){
-
-       });
-      $('#play-'+ url).on('click',function(){
-         
-         // change the button to pause(hide play button show pause button..)
-         $('spanPlay-'+ url).hide();
-         $('spanPause-'+ url).show(); 
-          
-          //start the intravel
-          play(url,intravel);
-
-       });
-      
-
-      $("#sites").append(str);
+      $("#sites").html(str);
     }
 
 
@@ -120,16 +169,26 @@ function loadFromJson () {
    
      if(snapshot.val() !== null){
             // iterate through data
-        snapshot.forEach(function(site) {
+        snapshot.forEach(function(s) {
+          //console.log(s.val().stat);
+            var site = s.val();
+          if(site.stat === 'pause'){
+              id =  null;
+          }
+          else
+          {
+              //play will return the id of the setIntravel()
+              id = play(site.url,site.intravel,null);      
+          }  
            //print out html with data
-           print(site.url,site.name,site.intravel);
+           print(site,id);
         });
     }
     else{
          //empty is defined top of the file
        $("#sites").html(empty);
     } 
-      console.log(sites);
+      console.log(snapshot.val());
   }, function (errorObject) {
     console.log("The read failed: " + errorObject.code);
     
@@ -141,3 +200,15 @@ function loadFromJson () {
    
 
 }
+
+//everytime a site is deleted this will be called
+db.on("child_removed", function(snapshot) {
+  var deletedPost = snapshot.val();
+  console.log("The blog post titled '" + deletedPost.title + "' has been deleted");
+});
+
+//everytime a site is deleted this will be called
+db.on("child_changed", function(snapshot) {
+  var changedPost = snapshot.val();
+  console.log("The updated post title is " + changedPost.title);
+});
