@@ -16,7 +16,7 @@ var empty = '<li class="list-group-item" id="empty">No apps to wake up...</li>';
 
         var url = $("#url").val();
         var name = $("#name").val();
-        var intravel = $("#intravel").val();
+        var intravel = ($("#intravel").val() * 60000);
        
 
        db.child(name).set({
@@ -33,7 +33,7 @@ var empty = '<li class="list-group-item" id="empty">No apps to wake up...</li>';
 
 
 
-    function pause(id,url,name) {
+    function pause(id,name) {
 
        // change the button to play(hide pause button show play button..)
          $('#buttonPause-'+ name).hide(); 
@@ -47,7 +47,7 @@ var empty = '<li class="list-group-item" id="empty">No apps to wake up...</li>';
         });
     }
 
-    function remove (id,url,name) {
+    function removeSite (id,url,name) {
       // CSS STUFF..
      
      //clear the whole li anf children fron DOM
@@ -57,18 +57,18 @@ var empty = '<li class="list-group-item" id="empty">No apps to wake up...</li>';
       if (id !== null) {
          clearInterval(id);
       }
-
+       console.log("removing");
        //remove from firebase
       db.child(name).remove();
 
     }
 
-    function edit (url,intravel,name,status) {
+    function editing (url,intravel,name,status) {
       //preparing modal
       $("#modalLabel").html('Edite'+name);
       $("#editName").val(name);
       $("#editUrl").val(url);
-      $("#editIntravel").val(intravel);
+      $("#editIntravel").val((intravel/60000));
 
       //add click event for save button
       $("#editSave").click(function(){
@@ -79,8 +79,8 @@ var empty = '<li class="list-group-item" id="empty">No apps to wake up...</li>';
         db.child($("#editName").val()).set({
           name: $("#editName").val()+'',
           url: $("#editUrl").val()+'',
-          intravel: $("#editIntravel").val()+'',
-          stat: _status
+          intravel: ($("#editIntravel").val()*60000)+'',
+          stat: status
         });
 
         $('#editModal').modal('hide');
@@ -135,21 +135,21 @@ var empty = '<li class="list-group-item" id="empty">No apps to wake up...</li>';
 
 
      str+= '<li id="li-'+ name +'" class="list-group-item">';
-     str+= '<a href="'+url+'" title="'+url+'">';
+     str+= '<a href="'+url+'" target="_blank" title="'+url+'">';
      str+= name;
      str+= '</a>'
-     str+= 'Will wake up every '+(intravel/60000) + " mins"
-     str+= '<button id="buttonPause-'+ name +'" class="alert alert-warning pause" onClick="pause('+id+','+name+');" title="pause app">'+ 
-              '<span id="spanPause-'+ name +'" class="glyphicon glyphicon glyphicon-pause"></span> </button>';
-     str+= '<button id="buttonPlay-'+ name +'" class="alert alert-success play" onClick="play('+url+','+intravel+','+name+');" title="resume app">'+ 
-              '<span id="spanPlay-'+ name +'" class="glyphicon glyphicon glyphicon-play"></span> </button>';
-     str+= '<button id="edit-'+ name +'" class="alert alert-info edit" onClick="editing('+url+','+intravel+','+name+','+site.stat+');" title="edit app">'+
-               '<span id="spanEdit-'+ name +'" class="glyphicon glyphicon-pencil"></span> </button>';
-     str+= '<button id="remove-'+ name +'" class="alert alert-danger remove" onClick="remove('+id+','+url+','+name+');" title="delete app">'+
+     str+= 'The intravel is every '+(intravel/60000) + " mins"
+     
+     str+= '<button id="remove-'+ name +'" class="alert alert-danger remove" onClick="removeSite('+id+','+"'"+url+"'"+','+"'"+name+"'"+');" title="delete app">'+
                '<span id="spanRemove-'+ name +'" class="glyphicon glyphicon-remove"></span> </button>';
+     str+= '<button id="edit-'+ name +'" class="alert alert-info edit" onClick="editing('+"'"+url+"'"+','+intravel+','+"'"+name+"'"+','+"'"+site.stat+"'"+');" title="edit app">'+
+               '<span id="spanEdit-'+ name +'" class="glyphicon glyphicon-pencil"></span> </button>';
+     str+= '<button id="buttonPause-'+ name +'" class="alert alert-warning pause" onClick="pause('+id+','+"'"+name+"'"+');" title="pause app">'+ 
+              '<span id="spanPause-'+ name +'" class="glyphicon glyphicon glyphicon-pause"></span> </button>';
+     str+= '<button id="buttonPlay-'+ name +'" class="alert alert-success play" onClick="play('+"'"+url+"'"+','+intravel+','+"'"+name+"'"+');" title="resume app">'+ 
+              '<span id="spanPlay-'+ name +'" class="glyphicon glyphicon glyphicon-play"></span> </button>';
      str += '</li>';
-  
-      $("#sites").html(str);
+      $("#sites").append(str);
     
      if(site.stat === 'pause'){
        // change the button to play(hide pause button show play button..)
@@ -171,6 +171,8 @@ function loadFromJson () {
    
      if(snapshot.val() !== null){
             // iterate through data
+        //clear the list first
+          $("#sites").empty();
         snapshot.forEach(function(s) {
           //console.log(s.val().stat);
             var site = s.val();
@@ -206,11 +208,11 @@ function loadFromJson () {
 //everytime a site is deleted this will be called
 db.on("child_removed", function(snapshot) {
   var deletedPost = snapshot.val();
-  console.log("The blog post titled '" + deletedPost.title + "' has been deleted");
+  console.log("removed");
 });
 
 //everytime a site is deleted this will be called
 db.on("child_changed", function(snapshot) {
   var changedPost = snapshot.val();
-  console.log("The updated post title is " + changedPost.title);
+  console.log("updated");
 });

@@ -13,7 +13,7 @@
      	margin-left: 0.625em;
      }
      li{
-     	margin-bottom: 0.625em;
+     	margin-bottom: 0.01em !important;
      }
      header {
  		 margin-bottom: 2.625em;
@@ -28,7 +28,12 @@
     padding-bottom: 0;
   }
 
-
+  #sites li a {
+    margin-right: 0.6em;
+  }
+  #sites li button {
+    margin-right: 0.3em;
+  }
   #sites {
     margin-top: 2.3em;
   }
@@ -44,18 +49,18 @@
      		</header>
      		<form class="form">
           <div class="form-group">
-          <label for="appName">App Name:</label>
-          <input type="text" class="form-control" id="appName" placeholder="full domain (include hhtp://)">
+          <label for="name">App Name:</label>
+          <input type="text" class="form-control" id="name" placeholder="name of the app">
         </div>  			  
         <div class="form-group">
 			    <label for="url">Url:</label>
 			    <input type="text" class="form-control" id="url" placeholder="full url (include http:// or https://)">
 			  </div>
         <div class="form-group">
-          <label for="intravel">Intravel:</label>
+          <label for="intravel"><h5> Intravel: <span class="small">In Minutes!!</span></h5></label>
           <input type="text" class="form-control" id="intravel" placeholder="intravel to wake up the dyno">
         </div>
-			  <button type='button' id="awake" class="btn btn-default" onClick="wakeUp();">wake up!</button>
+			  <button type='button' id="awake" class="btn btn-default" onClick="startTimer();">wake up!</button>
         <div id="err" class="alert alert-danger alert-dismissible" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <strong>Error!</strong> <span id="theError"></span>
@@ -90,14 +95,14 @@
                   <form class="form">
                       <div class="form-group">
                       <label for="appName">App Name:</label>
-                      <input type="text" class="form-control" id="editAppName" placeholder="Name of the app">
+                      <input type="text" class="form-control" id="editName" placeholder="Name of the app">
                     </div>          
                     <div class="form-group">
                       <label for="url">Url:</label>
                       <input type="text" class="form-control" id="editUrl" placeholder="full url (include http:// or https://)">
                     </div>
                     <div class="form-group">
-                      <label for="intravel">Intravel:</label>
+                      <label for="intravel"><h5> Intravel: <span class="small">In Minutes!!</span></h5></label>
                       <input type="text" class="form-control" id="editIntravel" placeholder="intravel to wake up the dyno">
                     </div>
 
