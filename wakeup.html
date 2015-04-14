@@ -7,37 +7,9 @@
 	<!-- Viewport meta tag to prevent iPhone from scaling our page -->
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
-	<style type="text/css">
-     img{
-     	margin-left: 0.625em;
-     }
-     li{
-     	margin-bottom: 0.01em !important;
-     }
-     header {
- 		 margin-bottom: 2.625em;
-	 }
-   #err,#info,.play{
-    display: none;
-   }
-   .remove,.pause, 
-   .play, .edit {
-    float: right;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="./css/style.css" />
 
-  #sites li a {
-    margin-right: 0.6em;
-  }
-  #sites li button {
-    margin-right: 0.3em;
-  }
-  #sites {
-    margin-top: 2.3em;
-  }
-	</style>
   </head>
   <body>
    <div class="container-fluid">
@@ -57,8 +29,8 @@
 			    <input type="text" class="form-control" id="url" placeholder="full url (include http:// or https://)">
 			  </div>
         <div class="form-group">
-          <label for="intravel"><h5> Intravel: <span class="small">In Minutes!!</span></h5></label>
-          <input type="text" class="form-control" id="intravel" placeholder="intravel to wake up the dyno">
+          <label for="intravel"><h5> Intreval: <span class="small">In Minutes!!</span></h5></label>
+          <input type="text" class="form-control" id="intravel" placeholder="intreval to wake up the dyno">
         </div>
 			  <button type='button' id="awake" class="btn btn-default" onClick="startTimer();">wake up!</button>
         <div id="err" class="alert alert-danger alert-dismissible" role="alert">
@@ -75,8 +47,6 @@
      	<div class="col-sm-12 col-md-6 col-md-offset-3">
      		<ul id="sites" class="list-group">
      		</ul>
-     		<h3 id="word"></h3>
-     		<p id="extraInfo"></p>
      	</div>
      </div>
    </div>
@@ -102,8 +72,8 @@
                       <input type="text" class="form-control" id="editUrl" placeholder="full url (include http:// or https://)">
                     </div>
                     <div class="form-group">
-                      <label for="intravel"><h5> Intravel: <span class="small">In Minutes!!</span></h5></label>
-                      <input type="text" class="form-control" id="editIntravel" placeholder="intravel to wake up the dyno">
+                      <label for="intravel"><h5> Intreval: <span class="small">In Minutes!!</span></h5></label>
+                      <input type="text" class="form-control" id="editIntravel" placeholder="intreval to wake up the dyno">
                     </div>
 
                   </form>

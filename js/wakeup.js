@@ -102,14 +102,20 @@ var empty = '<li class="list-group-item" id="empty">No apps to wake up...</li>';
              });
      }
         console.log("timer stated");
-        return setInterval(function(){ wakeUp(url) }, intravel)
+
+        //make a wake up call first
+         wakeUp(url,name);
+         //then make an intreval
+        return setInterval(function(){ wakeUp(url,name) }, intravel)
     }
 
 
 /*make a fake ajax call to the url; which will wake up the dyno */
-    function wakeUp (url) {
-
-      $.ajax(url)
+    function wakeUp (url,name) {
+     console.log(url);
+      // an indecations to the use the server is still waking up
+        $("#li-"+name).css({"z-index":"-1"}).addClass("disabled");
+      $.ajax(url+'')
       .fail(function( jqXHR, textStatus){
        /* It's not really working...???*/
          console.dir("faild: "+jqXHR.status + "  "+ textStatus);
@@ -117,12 +123,15 @@ var empty = '<li class="list-group-item" id="empty">No apps to wake up...</li>';
         {
           console.log("status:200");
         }
+        // an indecations to the use the server is done waking up
+        $("#li-"+name).css({"z-index":"1"}).removeClass("disabled");
       })
       .done(function(){
-
+        // an indecations to the use the server is done waking up
+        $("#li-"+name).css({"z-index":"1"}).removeClass("disabled");
       })
       .always(function(){
-        
+       
       });
     }
 

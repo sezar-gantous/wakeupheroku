@@ -1,0 +1,28 @@
+     img{
+     	margin-left: 0.625em;
+     }
+     li{
+     	margin-bottom: 0.01em !important;
+     }
+     header {
+ 		 margin-bottom: 2.625em;
+	 }
+   #err,#info,.play{
+    display: none;
+   }
+   .remove,.pause, 
+   .play, .edit {
+    float: right;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  #sites li a {
+    margin-right: 0.6em;
+  }
+  #sites li button {
+    margin-right: 0.3em;
+  }
+  #sites {
+    margin-top: 2.3em;
+  }
